@@ -27,7 +27,8 @@ import {
 } from 'react-native/Libraries/NewAppScreen';
 
 import SmsAndroid from 'react-native-get-sms-android';
-const CryptoJS = require("crypto-js");
+import CryptoJS from "react-native-crypto-js";
+import { generateOTP } from './apis';
 
 
 var smsFilter = {
@@ -70,6 +71,7 @@ const Section = ({children, title}): Node => {
 
 const App: () => Node = () => {
   const [smsList, setSmsList] = React.useState([]);
+  const [secret, ] = React.useState(getSecret())
   const regex = /OTP .{0,} CoWIN is (.*)\. It will be valid/i;
   SmsAndroid.list(
     JSON.stringify(smsFilter),
@@ -87,6 +89,14 @@ const App: () => Node = () => {
     backgroundColor: isDarkMode ? Colors.darker : Colors.lighter,
   };
 
+
+  React.useEffect(() => {
+    console.log('Making api call....')
+    generateOTP(getSecret(), '9665549658').then(x => {
+      console.log('response is ', x);
+    }, e => console.log('error is ', e));
+    
+  }, [])
   return (
     <SafeAreaView style={backgroundStyle}>
       <StatusBar barStyle={isDarkMode ? 'light-content' : 'dark-content'} />
@@ -102,7 +112,8 @@ const App: () => Node = () => {
             OTP for now is: {
               smsList.map(x => regex.exec(x.body)[1])
             }
-            secret is {getSecret()}
+
+            Secret is {secret}
           </Section>
         </View>
       </ScrollView>

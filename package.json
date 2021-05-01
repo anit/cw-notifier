@@ -10,9 +10,9 @@
     "lint": "eslint ."
   },
   "dependencies": {
-    "crypto-js": "^4.0.0",
     "react": "17.0.1",
     "react-native": "0.64.0",
+    "react-native-crypto-js": "^1.0.0",
     "react-native-get-sms-android": "^2.1.0"
   },
   "devDependencies": {
