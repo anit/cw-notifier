@@ -22,12 +22,21 @@ import {
   Colors,
   Header
 } from 'react-native/Libraries/NewAppScreen';
-import { readOtpFromSms } from './apis';
+import { readOtpFromSms, requestOTP, validateOTP } from './apis';
 
 const App: () => Node = () => {
-  
-  React.useEffect(() => {
-    readOtpFromSms().then(x => console.log('OTP is ', x));
+
+  React.useEffect(async () => {
+    try {
+      const txnId = await requestOTP('9665549658', 'b5cab167-7977-4df1-8027-a63aa144f04e');
+      console.log('===================Response from request otp is ', txnId);
+      const otp = txnId && await readOtpFromSms();
+      console.log('============otp is ', otp);
+      const token = otp && await validateOTP(otp, txnId);
+      console.log('=====================Token value is', token); 
+    } catch (e) {
+      console.log('==============fucked....', e)
+    }
   }, [])
 
   return (

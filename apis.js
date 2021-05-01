@@ -1,15 +1,16 @@
 import SmsAndroid from 'react-native-get-sms-android';
 import CryptoJS from "react-native-crypto-js";
+import { sha256 } from 'react-native-sha256';
 
-export const getSecret = () => {
+
+export const getSecret = (userId) => {
   const key = 'CoWIN@$#&*(!@%^&';
-  const userId = 'b5cab167-7977-4df1-8027-a63aa144f04e';
 
   return CryptoJS.AES.encrypt(userId, key).toString();
 }
 
-export const requestOTP = (mobile) => {
-  const secret = getSecret();
+export const requestOTP = (mobile, userId) => {
+  const secret = getSecret(userId);
   return new Promise((resolve, reject) => {
     fetch('https://cdn-api.co-vin.in/api/v2/auth/generateMobileOTP', {
       method: 'POST',
@@ -22,6 +23,26 @@ export const requestOTP = (mobile) => {
     .then(response => response.json())
     .then(json => {
       if (json && json.txnId) resolve(json.txnId);
+      else reject();
+    })
+    .catch(e => reject(e));
+  }) 
+}
+
+export const validateOTP = async (otp, txnId) => {
+  const hash = await sha256(otp);
+  return new Promise((resolve, reject) => {
+    fetch('https://cdn-api.co-vin.in/api/v2/auth/validateMobileOtp', {
+      method: 'POST',
+      headers: {
+        Accept: 'application/json',
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify({ otp: hash, txnId })
+    })
+    .then(response => response.json())
+    .then(json => {
+      if (json) resolve(json);
       else reject();
     })
     .catch(e => reject(e));

@@ -13,6 +13,8 @@ target 'vaccineNotifier' do
   )
 
 
+  pod 'RNSha256', :path => '../node_modules/react-native-sha256'
+
   target 'vaccineNotifierTests' do
     inherit! :complete
     # Pods for testing
