@@ -22,21 +22,23 @@ import {
   Colors,
   Header
 } from 'react-native/Libraries/NewAppScreen';
-import { readOtpFromSms, requestOTP, validateOTP } from './apis';
+import { mockResponse, parseAvailableCenters, readOtpFromSms, requestOTP, validateOTP } from './apis';
 
 const App: () => Node = () => {
 
-  React.useEffect(async () => {
-    try {
-      const txnId = await requestOTP('9665549658', 'b5cab167-7977-4df1-8027-a63aa144f04e');
-      console.log('===================Response from request otp is ', txnId);
-      const otp = txnId && await readOtpFromSms();
-      console.log('============otp is ', otp);
-      const token = otp && await validateOTP(otp, txnId);
-      console.log('=====================Token value is', token); 
-    } catch (e) {
-      console.log('==============fucked....', e)
-    }
+  // React.useEffect(async () => {
+  //   try {
+  //     const txnId = await requestOTP('9665549658', 'b5cab167-7977-4df1-8027-a63aa144f04e');
+  //     const otp = txnId && await readOtpFromSms();
+  //     const token = otp && await validateOTP(otp, txnId);
+  //   } catch (e) {
+  //     console.log('==============fucked....', e)
+  //   }
+  // }, [])
+
+
+  React.useEffect(() => {
+    console.log('=============parsed response is ', parseAvailableCenters(mockResponse));
   }, [])
 
   return (
