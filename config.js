@@ -17,42 +17,49 @@ export const config = {
   districts: [
     {
       id: 383, // Pune 
+      name: 'Pune',
       notifiers: [
         { type: 'tg', chat_id: -500113783 }
       ]
     },
     {
       id: 391, // Ahmednagar
+      name: 'Ahmednagar',
       notifiers: [
         { type: 'tg', chat_id: -500113783 }
       ]
     },
     {
-      id: 393, // Raigad
+      id: 393, // Raigad,
+      name: 'Raigad',
       notifiers: [
         { type: 'tg', chat_id: -500113783 }
       ]
     },
     {
       id: 155, // Vadodara
+      name: 'Vadodara',
       notifiers: [
         { type: 'tg', chat_id: -500113783 }
       ]
     },
     {
       id: 777, // Vadodara Corporation
+      name: 'Vadodara Corporation',
       notifiers: [
         { type: 'tg', chat_id: -500113783 }
       ]
     },
     {
       id: 312, // Bhopal
+      name: 'Bhopal',
       notifiers: [
         { type: 'tg', chat_id: -500113783 }
       ]
     },
     {
       id: 314, // Indore
+      name: 'Indore',
       notifiers: [
         { type: 'tg', chat_id: -500113783 }
       ]

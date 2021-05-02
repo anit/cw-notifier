@@ -75,7 +75,7 @@ export const readOtpFromSms = () => {
       retries++;
       SmsAndroid.list(
         JSON.stringify({
-          minDate: Date.now() - (1000 * 60 * 20), // change last number to change mins.
+          minDate: Date.now() - (1000 * 60 * 2), // change last number to change mins.
           maxDate: Date.now,
           bodyRegex: '(.*)Your OTP to register\/access CoWIN(.*)', // content regex to match
           maxCount: 1
@@ -142,7 +142,7 @@ export const parseAvailableCenters = (json) => {
 
 export const notifyTelegram = (json, chat_id) => {
   const text = tgMessage(json);
-  fetch(`https://api.telegram.org/bot${config.tgBot.token}/sendMessage`, {
+  return fetch(`https://api.telegram.org/bot${config.tgBot.token}/sendMessage`, {
     method: 'POST',
     headers: {
       Accept: 'application/json',
@@ -153,7 +153,8 @@ export const notifyTelegram = (json, chat_id) => {
 }
 
 export const pingGod = (text) => {
-  fetch(`https://api.telegram.org/bot${config.tgBot.token}/sendMessage`, {
+  console.log('pinging god...', text, config.tgBot.token)
+  return fetch(`https://api.telegram.org/bot${config.tgBot.token}/sendMessage`, {
     method: 'POST',
     headers: {
       Accept: 'application/json',

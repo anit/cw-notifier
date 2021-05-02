@@ -30,6 +30,19 @@ import { config } from './config';
 
 const App: () => Node = () => {
   const [loading, setLoading] = React.useState(false);
+  const [logs, setLogs] = React.useState();
+  const recheckMins = 6;
+
+  React.useEffect(() => {
+    const interval = setInterval(() => {
+      onCheckClick();
+    }, 1000 * 60 * recheckMins);
+    return () => clearInterval(interval);
+  }, []);
+
+  const addLog = (log) => {
+    console.log(`${new Date().toLocaleString()} - ${log}`);
+  };
 
   const onCheckClick = async () => {
     setLoading(true)
@@ -38,16 +51,16 @@ const App: () => Node = () => {
       config.districts.forEach(async (dis) => {
         const availCentersNow = await getAvailableCenters(token.token, dis.id, ddmmyy(new Date()));
         availCentersNow && availCentersNow.length && dis.notifiers.forEach(n => notifyTelegram(availCentersNow, n.chat_id));
-        if (!availCentersNow || !availCentersNow.length) Alert.alert('Info', 'No centers found this week');
+        if (!availCentersNow || !availCentersNow.length) addLog(`No centers found this week for ${dis.name}`);
 
         const availCentersNext = await getAvailableCenters(token.token, dis.id, ddmmyy(nextWeekSameDay(new Date())));
         availCentersNext && availCentersNext.length && dis.notifiers.forEach(n => notifyTelegram(availCentersNext, n.chat_id));
-        if (!availCentersNext || !availCentersNext.length) Alert.alert('Info', 'No centers found next week')
+        if (!availCentersNext || !availCentersNext.length) addLog(`No centers found next week for ${dis.name}`);
       });
       setLoading(false);
     } catch (e) {
-      Alert.alert('Error', e);
       console.log('Error is ', e);
+      pingGod('Error is ', e)
       setLoading(false);
     }
   };
@@ -65,6 +78,7 @@ const App: () => Node = () => {
           }}>
           <Section title="Logs">
             <Button title={loading ? 'Check...' : 'Check'} onPress={onCheckClick} disabled={loading} />
+            <Text>{logs}</Text>
           </Section>
         </View>
       </ScrollView>
