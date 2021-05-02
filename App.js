@@ -9,12 +9,14 @@
 import React from 'react';
 import type {Node} from 'react';
 import {
+  Alert,
   SafeAreaView,
   ScrollView,
   StatusBar,
   StyleSheet,
   Text,
   useColorScheme,
+  Button,
   View,
 } from 'react-native';
 
@@ -22,24 +24,33 @@ import {
   Colors,
   Header
 } from 'react-native/Libraries/NewAppScreen';
-import { mockResponse, parseAvailableCenters, readOtpFromSms, requestOTP, validateOTP } from './apis';
+import { extractToken, getAvailableCenters, notifyTelegram } from './apis';
+import { ddmmyy, nextWeekSameDay } from './utils';
+import { config } from './config';
 
 const App: () => Node = () => {
+  const [loading, setLoading] = React.useState(false);
 
-  // React.useEffect(async () => {
-  //   try {
-  //     const txnId = await requestOTP('9665549658', 'b5cab167-7977-4df1-8027-a63aa144f04e');
-  //     const otp = txnId && await readOtpFromSms();
-  //     const token = otp && await validateOTP(otp, txnId);
-  //   } catch (e) {
-  //     console.log('==============fucked....', e)
-  //   }
-  // }, [])
+  const onCheckClick = async () => {
+    setLoading(true)
+    try {
+      const token = await extractToken();
+      config.districts.forEach(async (dis) => {
+        const availCentersNow = await getAvailableCenters(token.token, dis.id, ddmmyy(new Date()));
+        availCentersNow && availCentersNow.length && dis.notifiers.forEach(n => notifyTelegram(availCentersNow, n.chat_id));
+        if (!availCentersNow || !availCentersNow.length) Alert.alert('Info', 'No centers found this week');
 
-
-  React.useEffect(() => {
-    console.log('=============parsed response is ', parseAvailableCenters(mockResponse));
-  }, [])
+        const availCentersNext = await getAvailableCenters(token.token, dis.id, ddmmyy(nextWeekSameDay(new Date())));
+        availCentersNext && availCentersNext.length && dis.notifiers.forEach(n => notifyTelegram(availCentersNext, n.chat_id));
+        if (!availCentersNext || !availCentersNext.length) Alert.alert('Info', 'No centers found next week')
+      });
+      setLoading(false);
+    } catch (e) {
+      Alert.alert('Error', e);
+      console.log('Error is ', e);
+      setLoading(false);
+    }
+  }
 
   return (
     <SafeAreaView style={Colors.darker}>
@@ -53,6 +64,7 @@ const App: () => Node = () => {
             backgroundColor: Colors.black,
           }}>
           <Section title="Logs">
+            <Button title={loading ? 'Check...' : 'Check'} onPress={onCheckClick} disabled={loading} />
           </Section>
         </View>
       </ScrollView>

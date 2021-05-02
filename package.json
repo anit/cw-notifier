@@ -15,6 +15,7 @@
     "react-native": "0.64.0",
     "react-native-crypto-js": "^1.0.0",
     "react-native-get-sms-android": "^2.1.0",
+    "react-native-local-notifications": "^2.0.0",
     "react-native-sha256": "^1.4.7"
   },
   "devDependencies": {

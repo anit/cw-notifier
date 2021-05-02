@@ -5214,6 +5214,11 @@ react-native-get-sms-android@^2.1.0:
   resolved "https://registry.yarnpkg.com/react-native-get-sms-android/-/react-native-get-sms-android-2.1.0.tgz#0b04bd017f6e7f8a3c1ac9e61960e73d76750be0"
   integrity sha512-yYPlJ4DkuC9HnUL0ni644pDjRFnSQkdGHowIY5ab56YFDKHIEZ1rKuBCEbCWF0HALyvH6qCyfdHqwpzTtIj97w==
 
+react-native-local-notifications@^2.0.0:
+  version "2.0.0"
+  resolved "https://registry.yarnpkg.com/react-native-local-notifications/-/react-native-local-notifications-2.0.0.tgz#13a41453102449cdbf56d855e7521867c34b4df1"
+  integrity sha512-rTKuohXC9ht03ySVooLuQ0FwzqHtrW9nG3BlIa0t+ZuJR7+VfLHdcfPzNHak8SuNITkKN2ta9JKHgbBnarkCoA==
+
 react-native-sha256@^1.4.7:
   version "1.4.7"
   resolved "https://registry.yarnpkg.com/react-native-sha256/-/react-native-sha256-1.4.7.tgz#cef05260a3a3a17cd70727170d0c187ef7cefb8c"
