@@ -6,6 +6,7 @@
 
 export const config = {
   cowinKey: 'CoWIN@$#&*(!@%^&',
+  godChatId: 727080716,
   user: {
     mobile: '9665549658',
     user_id: 'b5cab167-7977-4df1-8027-a63aa144f04e'

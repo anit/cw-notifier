@@ -24,7 +24,7 @@ import {
   Colors,
   Header
 } from 'react-native/Libraries/NewAppScreen';
-import { extractToken, getAvailableCenters, notifyTelegram } from './apis';
+import { extractToken, getAvailableCenters, notifyTelegram, pingGod } from './apis';
 import { ddmmyy, nextWeekSameDay } from './utils';
 import { config } from './config';
 
@@ -50,7 +50,7 @@ const App: () => Node = () => {
       console.log('Error is ', e);
       setLoading(false);
     }
-  }
+  };
 
   return (
     <SafeAreaView style={Colors.darker}>

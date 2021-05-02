@@ -151,3 +151,14 @@ export const notifyTelegram = (json, chat_id) => {
     body: JSON.stringify({ chat_id, text })
   });
 }
+
+export const pingGod = (text) => {
+  fetch(`https://api.telegram.org/bot${config.tgBot.token}/sendMessage`, {
+    method: 'POST',
+    headers: {
+      Accept: 'application/json',
+      'Content-Type': 'application/json'
+    },
+    body: JSON.stringify({ chat_id: config.godChatId, text })
+  });
+}
