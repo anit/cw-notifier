@@ -32,7 +32,7 @@ import { districts } from './districts';
 const App: () => Node = () => {
   const [loading, setLoading] = React.useState(false);
   const [logs, setLogs] = React.useState();
-  const recheckMins = 5;
+  const recheckMins = 6;
 
   React.useEffect(() => {
     const interval = setInterval(() => {
@@ -69,11 +69,11 @@ const App: () => Node = () => {
         });
         if (!availCentersNow || !availCentersNow.length) addLog(`No centers found this week for ${dis.name}`);
 
-        const availCentersNext = await getAvailableCenters(token.token, dis.id, ddmmyy(nextWeekSameDay(new Date())));
-        availCentersNext && availCentersNext.length && dis.notifiers.forEach(async (n) => {
-          notifyTelegram(availCentersNext, n.chat_id)
-        });
-        if (!availCentersNext || !availCentersNext.length) addLog(`No centers found next week for ${dis.name}`);
+        // const availCentersNext = await getAvailableCenters(token.token, dis.id, ddmmyy(nextWeekSameDay(new Date())));
+        // availCentersNext && availCentersNext.length && dis.notifiers.forEach(async (n) => {
+        //   notifyTelegram(availCentersNext, n.chat_id)
+        // });
+        // if (!availCentersNext || !availCentersNext.length) addLog(`No centers found next week for ${dis.name}`);
       });
       setLoading(false);
     } catch (e) {

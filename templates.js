@@ -21,7 +21,7 @@ export const tgMessage = (json) => [
     `🪑 Available <b>${x.available}</b>`, 
     `🗓 ${x.date}`,
     `💉 ${capitalize(x.vaccine) || '?'}`,
-    `🏥 ${x.location}\n\n`,
+    `🏥 ${x.center}, <b>${x.district}</b>\n\n`,
   ].join('\n')),
   '•••••\n\n'
 ].join('');

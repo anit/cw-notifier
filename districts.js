@@ -73,4 +73,7 @@ export const districts = [
   // Bihar
   { id: 81, name: 'Rohtas', notifiers: [{ type: 'tg', chat_id: -1001337892951 }]},
   { id: 100, name: 'Buxar', notifiers: [{ type: 'tg', chat_id: -1001337892951 }] },
+  { id: 97, name: 'Patna', notifiers: [{ type: 'tg', chat_id: -1001337892951 }] },
+  { id: 73, name: 'Purnia', notifiers: [{ type: 'tg', chat_id: -1001337892951 }] },
+  { id: 98, name: 'Begusarai', notifiers: [{ type: 'tg', chat_id: -1001337892951 }] },
 ];

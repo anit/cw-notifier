@@ -134,7 +134,7 @@ export const parseAvailableCenters = (json) => {
     return allCenters.concat(...center.sessions.filter(x => {
       return x.min_age_limit == 18 && x.available_capacity >= 1;
     }).map(x => {
-      return { location: `${center.name}, ${center.district_name}`, pincode: center.pincode, date: x.date, vaccine: x.vaccine, available: x.available_capacity }
+      return { center: center.name, district: center.district_name, pincode: center.pincode, date: x.date, vaccine: x.vaccine, available: x.available_capacity }
     }));
   }, []);
 };
