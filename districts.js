@@ -2,6 +2,7 @@ export const districts = [
   // Madhya Pradesh
   { id: 312, name: 'Bhopal', notifiers: [{ type: 'tg', chat_id: -1001438545784 }] },
   { id: 314, name: 'Indore', notifiers: [{ type: 'tg', chat_id: -1001477347698 }] },
+  { id: 315, name: 'Jabalpur', notifiers: [{ type: 'tg', chat_id: -1001468768159 }] },
   
 
   /////////Maharashtra
