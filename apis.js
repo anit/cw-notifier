@@ -132,9 +132,9 @@ export const getAvailableCenters = (token, districtId, date) => {
 export const parseAvailableCenters = (json) => {
   return json.centers.reduce((allCenters, center) => {
     return allCenters.concat(...center.sessions.filter(x => {
-      return x.min_age_limit == 18 && x.available_capacity > 0;
+      return x.min_age_limit == 18 && x.available_capacity >= 1;
     }).map(x => {
-      return { location: `${center.name}, ${center.district_name}`, date: x.date, vaccine: x.vaccine, available: x.available_capacity }
+      return { location: `${center.name}, ${center.district_name}`, pincode: center.pincode, date: x.date, vaccine: x.vaccine, available: x.available_capacity }
     }));
   }, []);
 };
@@ -142,6 +142,18 @@ export const parseAvailableCenters = (json) => {
 
 export const notifyTelegram = (json, chat_id) => {
   const text = tgMessage(json);
+  return fetch(`https://api.telegram.org/bot${config.tgBot.token}/sendMessage?parse_mode=html`, {
+    method: 'POST',
+    headers: {
+      Accept: 'application/json',
+      'Content-Type': 'application/json'
+    },
+    body: JSON.stringify({ chat_id, text })
+  });
+}
+
+export const  pingTelegram = (chat_id) => {
+  const text = 'Test Ping';
   return fetch(`https://api.telegram.org/bot${config.tgBot.token}/sendMessage`, {
     method: 'POST',
     headers: {
@@ -152,9 +164,34 @@ export const notifyTelegram = (json, chat_id) => {
   });
 }
 
+// export const pingGod = (text) => {
+//   console.log('pinging god...', text, config.tgBot.token)
+//   return fetch(`https://api.telegram.org/bot${config.tgBot.token}/sendMessage`, {
+//     method: 'POST',
+//     headers: {
+//       Accept: 'application/json',
+//       'Content-Type': 'application/json'
+//     },
+//     body: JSON.stringify({ chat_id: config.godChatId, text })
+//   });
+// }
+
 export const pingGod = (text) => {
-  console.log('pinging god...', text, config.tgBot.token)
-  return fetch(`https://api.telegram.org/bot${config.tgBot.token}/sendMessage`, {
+  var json = [1,2,3,4];
+
+  text = [
+    '<b>New available slots</b> \n\n',
+    ...json.map(x => [
+      `Pin Code <b>211223</b>`,
+      `🏥 Location`,
+      `🪑 Available <b>140</b>`, 
+      `🗓 12-3-2021`,
+      `💉 COVISHIELD\n\n`
+    ].join('\n')),
+    '•••••\n\n'
+  ].join('');
+
+  return fetch(`https://api.telegram.org/bot${config.tgBot.token}/sendMessage?parse_mode=html`, {
     method: 'POST',
     headers: {
       Accept: 'application/json',

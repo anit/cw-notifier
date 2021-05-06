@@ -24,14 +24,15 @@ import {
   Colors,
   Header
 } from 'react-native/Libraries/NewAppScreen';
-import { extractToken, getAvailableCenters, notifyTelegram, pingGod } from './apis';
+import { extractToken, getAvailableCenters, notifyTelegram, pingGod, pingTelegram } from './apis';
 import { ddmmyy, nextWeekSameDay } from './utils';
 import { config } from './config';
+import { districts } from './districts';
 
 const App: () => Node = () => {
   const [loading, setLoading] = React.useState(false);
   const [logs, setLogs] = React.useState();
-  const recheckMins = 6;
+  const recheckMins = 5;
 
   React.useEffect(() => {
     const interval = setInterval(() => {
@@ -44,17 +45,34 @@ const App: () => Node = () => {
     console.log(`${new Date().toLocaleString()} - ${log}`);
   };
 
+  const onPingGroups = () => {
+    try {
+      districts.forEach(async (dis) => {
+        dis.notifiers.forEach(n => pingTelegram(n.chat_id));
+      });
+    } catch (e) { Alert.alert('Error', 'Something went wrong in pinging', e && e.toString && e.toString());  }
+  };
+  
+  const onPingGod = () => {
+    pingGod('asdfasdf');
+  }
+
+
   const onCheckClick = async () => {
     setLoading(true)
     try {
       const token = await extractToken();
-      config.districts.forEach(async (dis) => {
+      districts.forEach(async (dis) => {
         const availCentersNow = await getAvailableCenters(token.token, dis.id, ddmmyy(new Date()));
-        availCentersNow && availCentersNow.length && dis.notifiers.forEach(n => notifyTelegram(availCentersNow, n.chat_id));
+        availCentersNow && availCentersNow.length && dis.notifiers.forEach(async (n) => {
+          notifyTelegram(availCentersNow, n.chat_id)
+        });
         if (!availCentersNow || !availCentersNow.length) addLog(`No centers found this week for ${dis.name}`);
 
         const availCentersNext = await getAvailableCenters(token.token, dis.id, ddmmyy(nextWeekSameDay(new Date())));
-        availCentersNext && availCentersNext.length && dis.notifiers.forEach(n => notifyTelegram(availCentersNext, n.chat_id));
+        availCentersNext && availCentersNext.length && dis.notifiers.forEach(async (n) => {
+          notifyTelegram(availCentersNext, n.chat_id)
+        });
         if (!availCentersNext || !availCentersNext.length) addLog(`No centers found next week for ${dis.name}`);
       });
       setLoading(false);
@@ -76,9 +94,15 @@ const App: () => Node = () => {
           style={{
             backgroundColor: Colors.black,
           }}>
-          <Section title="Logs">
+          <Section title="Check with COWIN">
             <Button title={loading ? 'Check...' : 'Check'} onPress={onCheckClick} disabled={loading} />
-            <Text>{logs}</Text>
+          </Section>
+          <Section title="Ping Telegram Groups">
+            <Button title="Ping Telegram Groups" onPress={onPingGroups} />
+          </Section>
+
+          <Section title="Ping God">
+            <Button title="Ping God" onPress={onPingGod} />
           </Section>
         </View>
       </ScrollView>
