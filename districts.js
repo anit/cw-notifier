@@ -10,6 +10,7 @@ export const districts = [
   { id: 365, name: 'Nagpur', notifiers: [{ type: 'tg', chat_id: -1001381587960 }] },
   { id: 363, name: 'Pune', notifiers: [{ type: 'tg', chat_id: -1001360707118 }, { type: 'tg', chat_id: -500113783 }] },
   { id: 391, name: 'Ahmednagar', notifiers: [{ type: 'tg', chat_id: -1001360707118 }] },
+  { id: 389, name: 'Nashik', notifiers: [{ type: 'tg', chat_id: -1001198883967 }] },
 
   ///////Gujarat
   { id: 154, name: 'Ahmedabad', notifiers: [{ type: 'tg', chat_id: -1001317979883 }] },
