@@ -141,6 +141,15 @@ export const parseAvailableCenters = (json) => {
 
 
 export const notifyTelegram = (json, chat_id) => {
+  var reply_markup =  {
+    inline_keyboard: [[
+      {
+        text: 'Open Cowin',
+        url: 'https://selfregistration.cowin.gov.in'            
+      }]
+    ]
+  };
+
   const text = tgMessage(json);
   return fetch(`https://api.telegram.org/bot${config.tgBot.token}/sendMessage?parse_mode=html`, {
     method: 'POST',
@@ -148,7 +157,7 @@ export const notifyTelegram = (json, chat_id) => {
       Accept: 'application/json',
       'Content-Type': 'application/json'
     },
-    body: JSON.stringify({ chat_id, text })
+    body: JSON.stringify({ chat_id, text, reply_markup })
   });
 }
 
@@ -179,6 +188,15 @@ export const  pingTelegram = (chat_id) => {
 export const pingGod = (text) => {
   var json = [1,2,3,4];
 
+  var reply_markup =  {
+    "inline_keyboard": [[
+        {
+            "text": "Open Cowin",
+            "url": "https://selfregistration.cowin.gov.in"            
+        }]
+    ]
+};
+
   text = [
     '<b>New available slots</b> \n\n',
     ...json.map(x => [
@@ -189,7 +207,6 @@ export const pingGod = (text) => {
       `💉 COVISHIELD\n\n`
     ].join('\n')),
     '•••••\n\n',
-    '<a href=\"https://selfregistration.cowin.gov.in\"><b>Open Cowin</b></a>\n\n'
   ].join('');
 
   return fetch(`https://api.telegram.org/bot${config.tgBot.token}/sendMessage?parse_mode=html`, {
@@ -198,6 +215,6 @@ export const pingGod = (text) => {
       Accept: 'application/json',
       'Content-Type': 'application/json'
     },
-    body: JSON.stringify({ chat_id: config.godChatId, text })
+    body: JSON.stringify({ chat_id: config.godChatId, text, reply_markup })
   });
 }
