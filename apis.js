@@ -109,7 +109,7 @@ export const readOtpFromSms = () => {
 }
 
 
-export const getAvailableCenters = (token, districtId, date) => {
+export const getAvailableCenters = (token, districtId, date, minAge = 18) => {
   return new Promise((resolve, reject) => {
     fetch(`https://cdn-api.co-vin.in/api/v2/appointment/sessions/calendarByDistrict?district_id=${districtId}&date=${date}`, {
       method: 'GET',
@@ -121,7 +121,7 @@ export const getAvailableCenters = (token, districtId, date) => {
     })
     .then(response => response.json())
     .then(json => {
-      if (json) resolve(parseAvailableCenters(json));
+      if (json) resolve(parseAvailableCenters(json, minAge));
       else reject('Something went wrong in making json of available centers');
     })
     .catch(e => { console.log('Error getting available centers: ', e); reject(e); });
@@ -129,10 +129,10 @@ export const getAvailableCenters = (token, districtId, date) => {
 };
 
 
-export const parseAvailableCenters = (json) => {
+export const parseAvailableCenters = (json, minAge) => {
   return json.centers.reduce((allCenters, center) => {
     return allCenters.concat(...center.sessions.filter(x => {
-      return x.min_age_limit == 18 && x.available_capacity >= 1;
+      return x.min_age_limit == minAge && x.available_capacity >= 1;
     }).map(x => {
       return { center: center.name, district: center.district_name, pincode: center.pincode, date: x.date, vaccine: x.vaccine, available: x.available_capacity }
     }));

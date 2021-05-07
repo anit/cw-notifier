@@ -63,7 +63,7 @@ const App: () => Node = () => {
     try {
       const token = await extractToken();
       districts.forEach(async (dis) => {
-        const availCentersNow = await getAvailableCenters(token.token, dis.id, ddmmyy(new Date()));
+        const availCentersNow = await getAvailableCenters(token.token, dis.id, ddmmyy(new Date()), dis.minAge || 18);
         availCentersNow && availCentersNow.length && dis.notifiers.forEach(async (n) => {
           notifyTelegram(availCentersNow, n.chat_id)
         });
