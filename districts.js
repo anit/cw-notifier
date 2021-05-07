@@ -3,13 +3,14 @@ export const districts = [
   { id: 312, name: 'Bhopal', notifiers: [{ type: 'tg', chat_id: -1001438545784 }] },
   { id: 314, name: 'Indore', notifiers: [{ type: 'tg', chat_id: -1001477347698 }] },
   { id: 315, name: 'Jabalpur', notifiers: [{ type: 'tg', chat_id: -1001468768159 }] },
+  { id: 318, name: 'Ujjain', notifiers: [{ type: 'tg', chat_id: '@vaccineujjain' }] },
   
 
   /////////Maharashtra
   { id: 395, name: 'Mumbai', notifiers: [{ type: 'tg', chat_id: -1001288470418 }] },
   { id: 392, name: 'Thane', notifiers: [{ type: 'tg', chat_id: -1001288470418 }] },
   { id: 365, name: 'Nagpur', notifiers: [{ type: 'tg', chat_id: -1001381587960 }] },
-  { id: 363, name: 'Pune', notifiers: [{ type: 'tg', chat_id: -1001360707118 }, { type: 'tg', chat_id: -500113783 }] },
+  { id: 363, name: 'Pune', notifiers: [{ type: 'tg', chat_id: '@vaccinepune' }, { type: 'tg', chat_id: -500113783 }] },
   { id: 391, name: 'Ahmednagar', notifiers: [{ type: 'tg', chat_id: -1001462642251 }] },
   { id: 389, name: 'Nashik', notifiers: [{ type: 'tg', chat_id: -1001198883967 }] },
 
@@ -38,7 +39,19 @@ export const districts = [
   { id: 663, name: 'Kanpur Dehat', notifiers: [{ type: 'tg', chat_id: -1001269960161 }] },
   { id: 651, name: 'Ghaziabad', notifiers: [{ type: 'tg', chat_id: -1001150141067 }] },
   { id: 650, name: 'Noida', notifiers: [{ type: 'tg', chat_id: -1001150141067 }] },
+ 
   
+  // Uttarakhand
+  
+  { id: 697, name: 'Dehradun', notifiers: [{ type: 'tg', chat_id: '@vaccinedehradunharidwar' }] },
+  { id: 702, name: 'Haridwar', notifiers: [{ type: 'tg', chat_id: '@vaccinedehradunharidwar' }] },
+
+  // Orrisa
+  { id: 446, name: 'Bhubaneshwar', notifiers: [{ type: 'tg', chat_id: '@vaccinebhubaneswar' }] },
+
+  // Punjab
+  { id: 488, name: 'Ludhiana', notifiers: [{ type: 'tg', chat_id: '@vaccineludhiana' }] },
+ 
   // Haryana
   { id: 188, name: 'Gurgaon', notifiers: [{ type: 'tg', chat_id: -1001150141067 }] },
   { id: 199, name: 'Faridabad',notifiers: [{ type: 'tg', chat_id: -1001150141067 }] },
@@ -59,18 +72,22 @@ export const districts = [
 
   // Rajasthan
   { id: 506, name: 'Jaipur', notifiers: [{ type: 'tg', chat_id: -1001261784688 }] },
+  { id: 504, name: 'Udaipur', notifiers: [{ type: 'tg', chat_id: '@vaccineudaipur' }] },
+
+  // Kerala
+  { id: 307, name: 'Ernakulam', notifiers: [{ type: 'tg', chat_id: '@vaccinekochi' }] },
 
   // Delhi
-  { id: 150, name: 'South West Delhi', notifiers: [{ type: 'tg', chat_id: -1001222862862 }]},
-  { id: 142, name: 'West Delhi', notifiers: [{ type: 'tg', chat_id: -1001222862862 }] },
-  { id: 144, name: 'South East Delhi', notifiers: [{ type: 'tg', chat_id: -1001222862862 }] },
-  { id: 149, name: 'South Delhi', notifiers: [{ type: 'tg', chat_id: -1001222862862 }] },
-  { id: 143, name: 'North West Delhi', notifiers: [{ type: 'tg', chat_id: -1001222862862 }] },
-  { id: 147, name: 'North East Delhi', notifiers: [{ type: 'tg', chat_id: -1001222862862 }] },
-  { id: 146, name: 'North Delhi', notifiers: [{ type: 'tg', chat_id: -1001222862862 }] },
-  { id: 140, name: 'New Delhi', notifiers: [{ type: 'tg', chat_id: -1001222862862 }] },
-  { id: 145, name: 'East Delhi', notifiers: [{ type: 'tg', chat_id: -1001222862862 }] },
-  { id: 141, name: 'Central Delhi', notifiers: [{ type: 'tg', chat_id: -1001222862862 }]},
+  { id: 150, name: 'South West Delhi', notifiers: [{ type: 'tg', chat_id: '@vaccinedelhi' }]},
+  { id: 142, name: 'West Delhi', notifiers: [{ type: 'tg', chat_id: '@vaccinedelhi' }] },
+  { id: 144, name: 'South East Delhi', notifiers: [{ type: 'tg', chat_id: '@vaccinedelhi' }] },
+  { id: 149, name: 'South Delhi', notifiers: [{ type: 'tg', chat_id: '@vaccinedelhi' }] },
+  { id: 143, name: 'North West Delhi', notifiers: [{ type: 'tg', chat_id: '@vaccinedelhi' }] },
+  { id: 147, name: 'North East Delhi', notifiers: [{ type: 'tg', chat_id: '@vaccinedelhi' }] },
+  { id: 146, name: 'North Delhi', notifiers: [{ type: 'tg', chat_id: '@vaccinedelhi' }] },
+  { id: 140, name: 'New Delhi', notifiers: [{ type: 'tg', chat_id: '@vaccinedelhi' }] },
+  { id: 145, name: 'East Delhi', notifiers: [{ type: 'tg', chat_id: '@vaccinedelhi' }] },
+  { id: 141, name: 'Central Delhi', notifiers: [{ type: 'tg', chat_id: '@vaccinedelhi' }]},
 
   // Bihar
   { id: 81, name: 'Rohtas', notifiers: [{ type: 'tg', chat_id: -1001337892951 }]},
