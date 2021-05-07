@@ -23,5 +23,6 @@ export const tgMessage = (json) => [
     `💉 ${capitalize(x.vaccine) || '?'}`,
     `🏥 ${x.center}, <b>${x.district}</b>\n\n`,
   ].join('\n')),
-  '•••••\n\n'
+  '•••••\n\n',
+  '<a href=\"https://selfregistration.cowin.gov.in\"><b>Open Cowin</b></a>\n\n'
 ].join('');

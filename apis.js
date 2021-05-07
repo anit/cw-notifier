@@ -188,7 +188,8 @@ export const pingGod = (text) => {
       `🗓 12-3-2021`,
       `💉 COVISHIELD\n\n`
     ].join('\n')),
-    '•••••\n\n'
+    '•••••\n\n',
+    '<a href=\"https://selfregistration.cowin.gov.in\"><b>Open Cowin</b></a>\n\n'
   ].join('');
 
   return fetch(`https://api.telegram.org/bot${config.tgBot.token}/sendMessage?parse_mode=html`, {
