@@ -109,14 +109,13 @@ export const readOtpFromSms = () => {
 }
 
 
-export const getAvailableCenters = (token, districtId, date, minAge = 18) => {
+export const getAvailableCenters = (districtId, date, minAge = 18) => {
   return new Promise((resolve, reject) => {
-    fetch(`https://cdn-api.co-vin.in/api/v2/appointment/sessions/calendarByDistrict?district_id=${districtId}&date=${date}`, {
+    fetch(`https://cdn-api.co-vin.in/api/v2/appointment/sessions/public/calendarByDistrict?district_id=${districtId}&date=${date}`, {
       method: 'GET',
       headers: {
         Accept: 'application/json',
-        'Content-Type': 'application/json',
-        authorization: `Bearer ${token}`
+        'Content-Type': 'application/json'
       }
     })
     .then(response => response.json())

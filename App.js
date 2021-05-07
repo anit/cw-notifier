@@ -54,16 +54,14 @@ const App: () => Node = () => {
   };
   
   const onPingGod = () => {
-    pingGod('asdfasdf');
+    pingGod();
   }
-
 
   const onCheckClick = async () => {
     setLoading(true)
     try {
-      const token = await extractToken();
       districts.forEach(async (dis) => {
-        const availCentersNow = await getAvailableCenters(token.token, dis.id, ddmmyy(new Date()), dis.minAge || 18);
+        const availCentersNow = await getAvailableCenters(dis.id, ddmmyy(new Date()), dis.minAge || 18);
         availCentersNow && availCentersNow.length && dis.notifiers.forEach(async (n) => {
           notifyTelegram(availCentersNow, n.chat_id)
         });
@@ -103,6 +101,7 @@ const App: () => Node = () => {
 
           <Section title="Ping God">
             <Button title="Ping God" onPress={onPingGod} />
+            {/* <Button title="Ping Total Members" onPress={onPingTotal} /> */}
           </Section>
         </View>
       </ScrollView>
