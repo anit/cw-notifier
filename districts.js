@@ -79,16 +79,17 @@ export const districts = [
   { id: 307, name: 'Ernakulam', notifiers: [{ type: 'tg', chat_id: '@vaccinekochi' }] },
 
   // Delhi
-  { id: 150, name: 'South West Delhi', notifiers: [{ type: 'tg', chat_id: '@vaccinedelhi' }]},
-  { id: 142, name: 'West Delhi', notifiers: [{ type: 'tg', chat_id: '@vaccinedelhi' }] },
-  { id: 144, name: 'South East Delhi', notifiers: [{ type: 'tg', chat_id: '@vaccinedelhi' }] },
-  { id: 149, name: 'South Delhi', notifiers: [{ type: 'tg', chat_id: '@vaccinedelhi' }] },
-  { id: 143, name: 'North West Delhi', notifiers: [{ type: 'tg', chat_id: '@vaccinedelhi' }] },
-  { id: 147, name: 'North East Delhi', notifiers: [{ type: 'tg', chat_id: '@vaccinedelhi' }] },
-  { id: 146, name: 'North Delhi', notifiers: [{ type: 'tg', chat_id: '@vaccinedelhi' }] },
-  { id: 140, name: 'New Delhi', notifiers: [{ type: 'tg', chat_id: '@vaccinedelhi' }] },
-  { id: 145, name: 'East Delhi', notifiers: [{ type: 'tg', chat_id: '@vaccinedelhi' }] },
-  { id: 141, name: 'Central Delhi', notifiers: [{ type: 'tg', chat_id: '@vaccinedelhi' }]},
+  { id: 150, name: 'South West Delhi', notifiers: [{ type: 'tg', chat_id: '@vaccinesouthwestdelhi' }]},
+  { id: 142, name: 'West Delhi', notifiers: [{ type: 'tg', chat_id: '@vaccinewestdelhi' }] },
+  { id: 144, name: 'South East Delhi', notifiers: [{ type: 'tg', chat_id: '@vaccinesoutheastdelhi' }] },
+  { id: 149, name: 'South Delhi', notifiers: [{ type: 'tg', chat_id: '@vaccinesouthdelhi' }] },
+  { id: 143, name: 'North West Delhi', notifiers: [{ type: 'tg', chat_id: '@vaccinenorthwestdelhi' }] },
+  { id: 147, name: 'North East Delhi', notifiers: [{ type: 'tg', chat_id: '@vaccinenortheastdel' }] },
+  { id: 146, name: 'North Delhi', notifiers: [{ type: 'tg', chat_id: '@vaccinenorthdelhi' }] },
+  { id: 140, name: 'New Delhi', notifiers: [{ type: 'tg', chat_id: '@vaccinenewdelhi' }] },
+  { id: 145, name: 'East Delhi', notifiers: [{ type: 'tg', chat_id: '@vaccineeastdelhi' }] },
+  { id: 141, name: 'Central Delhi', notifiers: [{ type: 'tg', chat_id: '@vaccinecentraldelhi' }]},
+  { id: 148, name: 'Shahdara', notifiers: [{ type: 'tg', chat_id: '@vaccineshahdara' }]},
 
   // Bihar
   { id: 81, name: 'Rohtas', notifiers: [{ type: 'tg', chat_id: -1001337892951 }]},
