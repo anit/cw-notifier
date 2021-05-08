@@ -139,6 +139,8 @@ export const getAvailableCenters = (token, districtId, date, minAge = 18) => {
 
 
 export const parseAvailableCenters = (json, minAge) => {
+  if (!json.centers) return [];
+  
   return json.centers.reduce((allCenters, center) => {
     return allCenters.concat(...center.sessions.filter(x => {
       return x.min_age_limit == minAge && x.available_capacity >= 1;
