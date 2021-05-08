@@ -58,12 +58,15 @@ const App: () => Node = () => {
   }
 
   const onCheckClick = async () => {
-    setLoading(true)
+    setLoading(true);
+    let token = null;
     try {
-      const token =  await extractToken();
-      console.log('TOken is ', token);
+      token = await extractToken();
+    } catch (e) { console.log('Unable to get token', e); }
+    try {
+      console.log('Token value is ', token);
       districts.forEach(async (dis) => {
-        const availCentersNow = await getAvailableCenters(token.token, dis.id, ddmmyy(new Date()), dis.minAge || 18);
+        const availCentersNow = await getAvailableCenters((token && token.token), dis.id, ddmmyy(new Date()), dis.minAge || 18);
         availCentersNow && availCentersNow.length && dis.notifiers.forEach(async (n) => {
           notifyTelegram(availCentersNow, n.chat_id)
         });
