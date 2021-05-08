@@ -112,7 +112,7 @@ export const readOtpFromSms = () => {
 
 
 export const getAvailableCenters = (token, districtId, date, minAge = 18) => {
-  const url = `https://cdn-api.co-vin.in/api/v2/appointment/sessions/public/calendarByDistrict?district_id=${districtId}&date=${date}`;
+  let url = `https://cdn-api.co-vin.in/api/v2/appointment/sessions/public/calendarByDistrict?district_id=${districtId}&date=${date}`;
   const headers = {
     Accept: 'application/json',
     'Content-Type': 'application/json'
