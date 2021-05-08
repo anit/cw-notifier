@@ -60,8 +60,10 @@ const App: () => Node = () => {
   const onCheckClick = async () => {
     setLoading(true)
     try {
+      const token =  await extractToken();
+      console.log('TOken is ', token);
       districts.forEach(async (dis) => {
-        const availCentersNow = await getAvailableCenters(dis.id, ddmmyy(new Date()), dis.minAge || 18);
+        const availCentersNow = await getAvailableCenters(token.token, dis.id, ddmmyy(new Date()), dis.minAge || 18);
         availCentersNow && availCentersNow.length && dis.notifiers.forEach(async (n) => {
           notifyTelegram(availCentersNow, n.chat_id)
         });

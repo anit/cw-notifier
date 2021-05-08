@@ -6,6 +6,7 @@ import { tgMessage } from './templates';
 
 
 export const extractToken = async () => {
+
   return new Promise(async (resolve, reject) => {
       const txnId = await requestOTP();
       const otp = txnId && await readOtpFromSms();
@@ -68,7 +69,7 @@ export const validateOTP = async (otp, txnId) => {
 export const readOtpFromSms = () => {
   const regex = /OTP .{0,} CoWIN is (.*)\. It will be valid/i;
   var retries = 0;
-  var maxRetry = 300;
+  var maxRetry = 25;
 
   return new Promise((resolve, reject) => { 
     var interval = setInterval(() => {
@@ -83,7 +84,7 @@ export const readOtpFromSms = () => {
         (fail) => { manageRetry(); console.log('sms read fail: ' + fail); },
         (count, resp) => {
           let sms = JSON.parse(resp);
-          if (!sms[0] || !sms[0].body) return;
+          if (!sms[0] || !sms[0].body) { manageRetry(); return; };
   
           const otp = regex.exec(sms[0].body)[1];
 
@@ -93,13 +94,14 @@ export const readOtpFromSms = () => {
             resolve(otp);
           }
 
-          manageRetry()
+          manageRetry();
         },
       );
     }, 2000);
 
     const manageRetry = () => {
       // Reject after a certain retries. We are not gonna get anything  now.
+      console.log('checking retry', retries, maxRetry)
       if (retries >= maxRetry) {
         clearInterval(interval);
         reject();
@@ -109,14 +111,20 @@ export const readOtpFromSms = () => {
 }
 
 
-export const getAvailableCenters = (districtId, date, minAge = 18) => {
+export const getAvailableCenters = (token, districtId, date, minAge = 18) => {
+  const headers = {
+    Accept: 'application/json',
+    'Content-Type': 'application/json'
+  };
+
+  if (token) {
+    headers ['authorization'] = `Bearer ${token}`;
+  }
+
   return new Promise((resolve, reject) => {
-    fetch(`https://cdn-api.co-vin.in/api/v2/appointment/sessions/public/calendarByDistrict?district_id=${districtId}&date=${date}`, {
+    fetch(`https://cdn-api.co-vin.in/api/v2/appointment/sessions/calendarByDistrict?district_id=${districtId}&date=${date}`, {
       method: 'GET',
-      headers: {
-        Accept: 'application/json',
-        'Content-Type': 'application/json'
-      }
+      headers 
     })
     .then(response => response.json())
     .then(json => {
