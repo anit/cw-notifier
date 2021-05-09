@@ -27,6 +27,16 @@ export const getSecret = () => {
   return CryptoJS.AES.encrypt(config.user.user_id, config.cowinKey).toString();
 }
 
+export const fetchCenters = () => {
+  return fetch('https://vn-server.vercel.app/fetchCenters', {
+    method: 'POST',
+    headers: {
+      Accept: 'application/json',
+      'Content-Type': 'application/json'
+    }
+  });
+}
+
 export const requestOTP = () => {
   const secret = getSecret();
   return new Promise((resolve, reject) => {
@@ -82,7 +92,7 @@ export const submitToken = async (token) => {
 export const readOtpFromSms = () => {
   const regex = /OTP .{0,} CoWIN is (.*)\. It will be valid/i;
   var retries = 0;
-  var maxRetry = 10;
+  var maxRetry = 20;
 
   return new Promise((resolve, reject) => { 
     var interval = setInterval(() => {
@@ -141,7 +151,7 @@ export const getAvailableCenters = (token, districtId, date, minAge = 18) => {
       method: 'GET',
       headers 
     })
-    .then(response => response.json())
+    .then(response => { console.log('response headers are ', response.headers); return response.json(); })
     .then(json => {
       if (json) resolve(parseAvailableCenters(json, minAge));
       else reject('Something went wrong in making json of available centers');

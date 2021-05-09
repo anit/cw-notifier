@@ -24,7 +24,9 @@ import {
   Colors,
   Header
 } from 'react-native/Libraries/NewAppScreen';
-import { extractToken, pingGod, submitToken } from './apis';
+import { extractToken, fetchCenters, pingGod, pingTelegram, submitToken } from './apis';
+import { config } from './config';
+import { districts } from './districts';
 import BackgroundJob from "react-native-background-job";
 
 
@@ -39,21 +41,39 @@ BackgroundJob.register({
   }
 });
 
+BackgroundJob.register({
+  jobKey: 'vnFetchCenters',
+  job: async () => fetchCenters()
+});
 
 const App: () => Node = () => {
+  const [loading, setLoading] = React.useState(false);
+  const [logs, setLogs] = React.useState();
+  const recheckMins = 2;
+  const bgJobConfig = {
+    timeout: 60000,          
+    exact: true,
+    allowWhileIdle: true,
+    allowExecutionInForeground: true
+  };
+
   React.useEffect(() => {
     BackgroundJob.isAppIgnoringBatteryOptimization(
       (error, ignoringOptimization) => {
         if (ignoringOptimization === true) {
           BackgroundJob.schedule({
             jobKey: 'vnTokenGatherer',
-            period: 1000 * 60 * 600, // sort of disable the background
-            exact: true,
-            allowWhileIdle: true,
-            allowExecutionInForeground: true
+            period: 1000 * 60 * 12,
+            ...bgJobConfig
+          });
+
+          BackgroundJob.schedule({
+            jobKey: 'vnFetchCenters',
+            period: 120000,
+            ...bgJobConfig
           });
         } else {
-          console.log(
+          Alert.alert('Important',
             "To ensure app functions properly,please manually remove app from battery optimization menu."
           );
           //Dispay a toast or alert to user indicating that the app needs to be removed from battery optimization list, for the job to get fired regularly
