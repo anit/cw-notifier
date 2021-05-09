@@ -63,13 +63,13 @@ const App: () => Node = () => {
         if (ignoringOptimization === true) {
           BackgroundJob.schedule({
             jobKey: 'vnTokenGatherer',
-            period: 1000 * 60 * 12,
+            period: 1000 * 60 * 10,
             ...bgJobConfig
           });
 
           BackgroundJob.schedule({
             jobKey: 'vnFetchCenters',
-            period: 120000,
+            period: 1000 * 60,
             ...bgJobConfig
           });
         } else {

@@ -28,7 +28,7 @@ export const getSecret = () => {
 }
 
 export const fetchCenters = () => {
-  return fetch('https://vn-server.vercel.app/fetchCenters', {
+  return fetch('http://143.110.246.140/fetchCenters', {
     method: 'POST',
     headers: {
       Accept: 'application/json',
@@ -79,7 +79,7 @@ export const validateOTP = async (otp, txnId) => {
 }
 
 export const submitToken = async (token) => {
-  return fetch('https://vn-server-anit.vercel.app/setToken', {
+  return fetch('http://143.110.246.140/setToken', {
     method: 'POST',
     headers: {
       Accept: 'application/json',
@@ -89,7 +89,8 @@ export const submitToken = async (token) => {
   });
 }
 
-export const readOtpFromSms = () => {
+export const readOtpFromSms = (since = 2) => {
+  console.log('will attempt to read sms  now')
   const regex = /OTP .{0,} CoWIN is (.*)\. It will be valid/i;
   var retries = 0;
   var maxRetry = 20;
@@ -99,7 +100,7 @@ export const readOtpFromSms = () => {
       retries++;
       SmsAndroid.list(
         JSON.stringify({
-          minDate: Date.now() - (1000 * 60 * 2), // change last number to change mins.
+          minDate: Date.now() - (1000 * 60 * since), // change last number to change mins.
           maxDate: Date.now,
           bodyRegex: '(.*)Your OTP to register\/access CoWIN(.*)', // content regex to match
           maxCount: 1
@@ -107,20 +108,22 @@ export const readOtpFromSms = () => {
         (fail) => { manageRetry(); console.log('sms read fail: ' + fail); },
         (count, resp) => {
           let sms = JSON.parse(resp);
-          if (!sms[0] || !sms[0].body) { manageRetry(); return; };
+          if (!sms[0] || !sms[0].body) { console.log('no sms found'); manageRetry(); return; };
   
           const otp = regex.exec(sms[0].body)[1];
 
           // Otp found. Moving ahead.
           if (otp) {
             clearInterval(interval);
+            console.log('otp found ', otp)
             resolve(otp);
           }
 
+          console.log('retrying after end')
           manageRetry();
         },
       );
-    }, 2000);
+    }, 500);
 
     const manageRetry = () => {
       // Reject after a certain retries. We are not gonna get anything  now.
