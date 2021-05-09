@@ -24,10 +24,7 @@ import {
   Colors,
   Header
 } from 'react-native/Libraries/NewAppScreen';
-import { extractToken, getAvailableCenters, notifyTelegram, pingGod, pingTelegram, submitToken } from './apis';
-import { ddmmyy, nextWeekSameDay } from './utils';
-import { config } from './config';
-import { districts } from './districts';
+import { extractToken, pingGod, submitToken } from './apis';
 import BackgroundJob from "react-native-background-job";
 
 
@@ -38,23 +35,13 @@ BackgroundJob.register({
     try {
       token = await extractToken();
       if (token && token.token) submitToken(token.token);
-      console.log('============Submitted Token Successfully from BG Service');
-    } catch (e) { console.log('===========Unable to get token', e); }
+    } catch (e) { pingGod(`Not able to extract token ${e.toString()}`); }
   }
 });
 
 
 const App: () => Node = () => {
-  const [loading, setLoading] = React.useState(false);
-  const [logs, setLogs] = React.useState();
-  const recheckMins = 6;
-
   React.useEffect(() => {
-    const interval = setInterval(() => {
-      onCheckClick();
-    }, 1000 * 60 * recheckMins);
-
-
     BackgroundJob.isAppIgnoringBatteryOptimization(
       (error, ignoringOptimization) => {
         if (ignoringOptimization === true) {
@@ -74,47 +61,7 @@ const App: () => Node = () => {
       }
     );
     console.log('Background job scheduled');
-
-    return () => clearInterval(interval);
   }, []);
-
-  const addLog = (log) => {
-    console.log(`${new Date().toLocaleString()} - ${log}`);
-  };
-
-  const onPingGroups = () => {
-    try {
-      districts.forEach(async (dis) => {
-        dis.notifiers.forEach(n => pingTelegram(n.chat_id));
-      });
-    } catch (e) { Alert.alert('Error', 'Something went wrong in pinging', e && e.toString && e.toString());  }
-  };
-  
-  const onPingGod = () => {
-    pingGod();
-  }
-
-  const onCheckClick = async () => {
-    setLoading(true);
-    let token = null;
-    try {
-      token = await extractToken();
-      if (token && token.token) submitToken(token.token);
-    } catch (e) { console.log('Unable to get token', e); }
-    try {
-      districts.forEach(async (dis) => {
-        const availCentersNow = await getAvailableCenters((token && token.token), dis.id, ddmmyy(new Date()), dis.minAge || 18);
-        availCentersNow && availCentersNow.length && dis.notifiers.forEach(async (n) => {
-          notifyTelegram(availCentersNow, n.chat_id)
-        });
-      });
-      setLoading(false);
-    } catch (e) {
-      console.log('Error is ', e);
-      pingGod('Error is ', e)
-      setLoading(false);
-    }
-  };
 
   return (
     <SafeAreaView style={Colors.darker}>
@@ -122,21 +69,16 @@ const App: () => Node = () => {
       <ScrollView
         contentInsetAdjustmentBehavior="automatic"
         style={Colors.darker}>
-        <Header />
         <View
           style={{
             backgroundColor: Colors.black,
           }}>
-          <Section title="Check with COWIN">
-            <Button title={loading ? 'Check...' : 'Check'} onPress={onCheckClick} disabled={loading} />
-          </Section>
-          <Section title="Ping Telegram Groups">
-            <Button title="Ping Telegram Groups" onPress={onPingGroups} />
-          </Section>
-
-          <Section title="Ping God">
-            <Button title="Ping God" onPress={onPingGod} />
-            {/* <Button title="Ping Total Members" onPress={onPingTotal} /> */}
+          <Section title="VaccNotifier Volunteer App">
+            <Text>
+              Simple! Just keep this app running in the background. It will do its job of keeping  the system alive.
+              All I need is permission to read SMS. Dont worry, I only process the Cowin OTP sms. Everything else is untouched.
+              Most Important: Please go to your Battery Optimization settings and give this app full access, so that it can generate tokens every 15 mins
+            </Text>
           </Section>
         </View>
       </ScrollView>
