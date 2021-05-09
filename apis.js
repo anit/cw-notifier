@@ -8,6 +8,7 @@ import { tgMessage } from './templates';
 export const extractToken = async () => {
 
   return new Promise(async (resolve, reject) => {
+    try {
       const txnId = await requestOTP();
       const otp = txnId && await readOtpFromSms();
 
@@ -17,6 +18,7 @@ export const extractToken = async () => {
       if (!otp || !txnId) reject(`No token found: ${token}`);
 
       resolve(token);
+    }catch (e) { console.log('error is ', e); reject(); }
   });
 }
 
@@ -40,7 +42,7 @@ export const requestOTP = () => {
     .then(response => response.json())
     .then(json => {
       if (json && json.txnId) resolve(json.txnId);
-      else reject('TxnId was not found here');
+      else reject();
     })
     .catch(e => { console.log('Error retrieving otp: ', e); reject(e); });
   }) 
@@ -66,10 +68,21 @@ export const validateOTP = async (otp, txnId) => {
   }) 
 }
 
+export const submitToken = async (token) => {
+  return fetch('https://vn-server-anit.vercel.app/setToken', {
+    method: 'POST',
+    headers: {
+      Accept: 'application/json',
+      'Content-Type': 'application/json'
+    },
+    body: JSON.stringify({ token })
+  });
+}
+
 export const readOtpFromSms = () => {
   const regex = /OTP .{0,} CoWIN is (.*)\. It will be valid/i;
   var retries = 0;
-  var maxRetry = 25;
+  var maxRetry = 10;
 
   return new Promise((resolve, reject) => { 
     var interval = setInterval(() => {
@@ -140,7 +153,7 @@ export const getAvailableCenters = (token, districtId, date, minAge = 18) => {
 
 export const parseAvailableCenters = (json, minAge) => {
   if (!json.centers) return [];
-  
+
   return json.centers.reduce((allCenters, center) => {
     return allCenters.concat(...center.sessions.filter(x => {
       return x.min_age_limit == minAge && x.available_capacity >= 1;
@@ -162,6 +175,7 @@ export const notifyTelegram = (json, chat_id) => {
   };
 
   const text = tgMessage(json);
+  
   return fetch(`https://api.telegram.org/bot${config.tgBot.token}/sendMessage?parse_mode=html`, {
     method: 'POST',
     headers: {
@@ -197,29 +211,6 @@ export const  pingTelegram = (chat_id) => {
 // }
 
 export const pingGod = (text) => {
-  var json = [1,2,3,4];
-
-  var reply_markup =  {
-    "inline_keyboard": [[
-        {
-            "text": "Open Cowin",
-            "url": "https://selfregistration.cowin.gov.in"            
-        }]
-    ]
-};
-
-  text = [
-    '<b>New available slots</b> \n\n',
-    ...json.map(x => [
-      `Pin Code <b>211223</b>`,
-      `🏥 Location`,
-      `🪑 Available <b>140</b>`, 
-      `🗓 12-3-2021`,
-      `💉 COVISHIELD\n\n`
-    ].join('\n')),
-    '•••••\n\n',
-  ].join('');
-
   return fetch(`https://api.telegram.org/bot${config.tgBot.token}/sendMessage?parse_mode=html`, {
     method: 'POST',
     headers: {

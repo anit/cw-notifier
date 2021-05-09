@@ -4,6 +4,7 @@ import android.app.Application;
 import android.content.Context;
 import com.facebook.react.PackageList;
 import com.facebook.react.ReactApplication;
+import com.pilloxa.backgroundjob.BackgroundJobPackage;
 import com.jamesisaac.rnbackgroundtask.BackgroundTaskPackage;
 import com.github.wumke.RNLocalNotifications.RNLocalNotificationsPackage;
 import com.sha256lib.Sha256Package;

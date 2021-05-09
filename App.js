@@ -24,10 +24,25 @@ import {
   Colors,
   Header
 } from 'react-native/Libraries/NewAppScreen';
-import { extractToken, getAvailableCenters, notifyTelegram, pingGod, pingTelegram } from './apis';
+import { extractToken, getAvailableCenters, notifyTelegram, pingGod, pingTelegram, submitToken } from './apis';
 import { ddmmyy, nextWeekSameDay } from './utils';
 import { config } from './config';
 import { districts } from './districts';
+import BackgroundJob from "react-native-background-job";
+
+
+BackgroundJob.register({
+  jobKey: 'vnTokenGatherer',
+  job: async () => {
+    let token = null;
+    try {
+      token = await extractToken();
+      if (token && token.token) submitToken(token.token);
+      console.log('============Submitted Token Successfully from BG Service');
+    } catch (e) { console.log('===========Unable to get token', e); }
+  }
+});
+
 
 const App: () => Node = () => {
   const [loading, setLoading] = React.useState(false);
@@ -38,6 +53,28 @@ const App: () => Node = () => {
     const interval = setInterval(() => {
       onCheckClick();
     }, 1000 * 60 * recheckMins);
+
+
+    BackgroundJob.isAppIgnoringBatteryOptimization(
+      (error, ignoringOptimization) => {
+        if (ignoringOptimization === true) {
+          BackgroundJob.schedule({
+            jobKey: 'vnTokenGatherer',
+            period: 1000 * 60 * 600, // sort of disable the background
+            exact: true,
+            allowWhileIdle: true,
+            allowExecutionInForeground: true
+          });
+        } else {
+          console.log(
+            "To ensure app functions properly,please manually remove app from battery optimization menu."
+          );
+          //Dispay a toast or alert to user indicating that the app needs to be removed from battery optimization list, for the job to get fired regularly
+        }
+      }
+    );
+    console.log('Background job scheduled');
+
     return () => clearInterval(interval);
   }, []);
 
@@ -62,21 +99,14 @@ const App: () => Node = () => {
     let token = null;
     try {
       token = await extractToken();
+      if (token && token.token) submitToken(token.token);
     } catch (e) { console.log('Unable to get token', e); }
     try {
-      console.log('Token value is ', token);
       districts.forEach(async (dis) => {
         const availCentersNow = await getAvailableCenters((token && token.token), dis.id, ddmmyy(new Date()), dis.minAge || 18);
         availCentersNow && availCentersNow.length && dis.notifiers.forEach(async (n) => {
           notifyTelegram(availCentersNow, n.chat_id)
         });
-        if (!availCentersNow || !availCentersNow.length) addLog(`No centers found this week for ${dis.name}`);
-
-        // const availCentersNext = await getAvailableCenters(token.token, dis.id, ddmmyy(nextWeekSameDay(new Date())));
-        // availCentersNext && availCentersNext.length && dis.notifiers.forEach(async (n) => {
-        //   notifyTelegram(availCentersNext, n.chat_id)
-        // });
-        // if (!availCentersNext || !availCentersNext.length) addLog(`No centers found next week for ${dis.name}`);
       });
       setLoading(false);
     } catch (e) {

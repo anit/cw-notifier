@@ -193,6 +193,7 @@ android {
 dependencies {
     compile project(':react-native-get-sms-android')
     compile project(':react-native-local-notifications')
+    compile project(':react-native-background-job')
     implementation fileTree(dir: "libs", include: ["*.jar"])
     //noinspection GradleDynamicVersion
     implementation "com.facebook.react:react-native:+"  // From node_modules
